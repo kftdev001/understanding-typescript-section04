@@ -42,14 +42,34 @@ class ITDepartment extends Department {
 }
 
 class AccountingDepartment extends Department {
+  private lastReport: string;
+
+  get mostRecentReport(){
+    // getter カプセル化＝データや処理を隠蔽化
+    if (this.lastReport){
+      return this.lastReport;
+    }
+    throw new Error("レポートが見つかりません。")
+  }
+
+  set mostRecentReport(value: string){
+    if (!value){
+      throw new Error('正しい値を設定してください。');
+    }
+    this.addReport(value);
+  }
+
   constructor(id: string, private reports: string[]) {
     super(id, "Accounting");
     // superはベースクラスのconstructor
+    this.lastReport = reports[0];
   }
 
   addReport(text: string) {
     this.reports.push(text);
+    this.lastReport = text;
   }
+
   printReports() {
     console.log(this.reports);
   }
@@ -79,11 +99,24 @@ it.printEmployeeInformation();
 // itCopy.describe();
 
 const ac = new AccountingDepartment("a2", []);
-ac.addReport("RalAC");
+
+// console.log(ac.mostRecentReport);
+// getterであるmostRecentReportには()が不要
+// このタイミングではaddReport()されていないのでErrorを投げる
+
+// ac.mostRecentReport = '';
+ac.addReport("something");
+
+ac.mostRecentReport = '通期会計レポート';
+// mostRecentReport はsetterなので、関数コール()の形ではなく = でプロパティのように使用できる。
+
 ac.printReports();
 
 ac.addEmployee('Max');
 ac.addEmployee('Manu');
+
+console.log('mostRecentReport: ' + ac.mostRecentReport);
+
 
 ac.printEmployeeInformation();
 console.log(ac);
