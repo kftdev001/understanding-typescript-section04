@@ -1,15 +1,27 @@
 // Code goes here!
 
 class Department {
+  static fiscalYear = 2020;
+
   // private readonly id: string;
   // name: string;
   protected employees: string[] = [];
   // javascriptは基本的にすべてpublic。privateの概念はtypescript。
 
+  static createEmployee(name: string) {
+    return { name: name };
+  }
+
   constructor(private readonly id: string, public name: string) {
     // id, name というプロパティの作成とコンストラクタを同時に定義できる。
     // readonly はtypescript固有。一度初期値が設定された後に変更不可とする。
     // this.name = n;
+    
+    // console.log(this.fiscalYear);
+    // これはエラー。staticでないメンバからstaticなfiscalYearにはアクセスできない。
+    // ※インスタンスからはアクセスできない。
+    // constructorはstaticにできない。
+    console.log(Department.fiscalYear); // これは可能
   }
 
   describe(this: Department) {
@@ -44,17 +56,17 @@ class ITDepartment extends Department {
 class AccountingDepartment extends Department {
   private lastReport: string;
 
-  get mostRecentReport(){
+  get mostRecentReport() {
     // getter カプセル化＝データや処理を隠蔽化
-    if (this.lastReport){
+    if (this.lastReport) {
       return this.lastReport;
     }
-    throw new Error("レポートが見つかりません。")
+    throw new Error("レポートが見つかりません。");
   }
 
-  set mostRecentReport(value: string){
-    if (!value){
-      throw new Error('正しい値を設定してください。');
+  set mostRecentReport(value: string) {
+    if (!value) {
+      throw new Error("正しい値を設定してください。");
     }
     this.addReport(value);
   }
@@ -83,7 +95,18 @@ class AccountingDepartment extends Department {
   }
 }
 
+// statice methodの使用
+const employee1 = Department.createEmployee('MaxStatic');
+console.log("static method/property : ");
+console.log(employee1, Department.fiscalYear);
+
 const it = new ITDepartment("d1", ["MaxIT"]);
+
+// Math.PI
+// .PI 円周率
+// .pow 2乗、べき乗を計算できる関数
+// Javascriptでグローバルに利用できるプロトタイプ関数(言う慣ればクラス)にまとめられている
+// Mathはstaticでグループ化、名前空間のような役割と果たす。
 
 it.addEmployee("Max");
 it.addEmployee("Manu");
@@ -107,16 +130,15 @@ const ac = new AccountingDepartment("a2", []);
 // ac.mostRecentReport = '';
 ac.addReport("something");
 
-ac.mostRecentReport = '通期会計レポート';
+ac.mostRecentReport = "通期会計レポート";
 // mostRecentReport はsetterなので、関数コール()の形ではなく = でプロパティのように使用できる。
 
 ac.printReports();
 
-ac.addEmployee('Max');
-ac.addEmployee('Manu');
+ac.addEmployee("Max");
+ac.addEmployee("Manu");
 
-console.log('mostRecentReport: ' + ac.mostRecentReport);
-
+console.log("mostRecentReport: " + ac.mostRecentReport);
 
 ac.printEmployeeInformation();
 console.log(ac);
