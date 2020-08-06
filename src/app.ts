@@ -1,8 +1,23 @@
+// type AddFn = (a: number, b: number) => number;
+// こちらの方が一般的な書き方。カスタム型。
+
+interface AddFn {
+  (a: number, b: number): number;
+  // 匿名メソッドのようなもの。
+  // typescriptはtype AddFn のような定義と理解する。
+}
+
+let add: AddFn;
+
+add = (n1: number, n2: number) => {
+  return n1 + n2;
+};
+
 interface Named {
   readonly name: string;
 }
 
-interface Greetable extends Named{
+interface Greetable extends Named {
   // interfaceはinterfaceを継承できる
   // type Person は実質的にinterface Personと同じ。
   // typeはカスタム型
@@ -38,9 +53,8 @@ class Person implements Greetable {
 // let user1: Greetable;
 let user1: Greetable;
 
-user1 = new Person('Max');
+user1 = new Person("Max");
 // PersonクラスはGreetableのインターフェースを実装しているのでuser1に設定可能
 
 user1.greet("Hello I am");
-console.log(user1)
-
+console.log(user1);
