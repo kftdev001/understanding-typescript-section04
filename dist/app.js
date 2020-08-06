@@ -20,10 +20,8 @@ class Department {
     static createEmployee(name) {
         return { name: name };
     }
-    describe() {
-        console.log(`Department (${this.id}): ${this.name}`);
-        // `` で囲うテンプレート文字列。 ${}により変数を指定、展開された文字列が得られる。
-    }
+    // メソッドの名前・引数・戻り値だけ決めた抽象クラス。実装は記述不可。voidでなければいけない。
+    // 具体的な実装はサブクラスで。(実装を強制できる)
     addEmployee(employee) {
         this.employees.push(employee);
     }
@@ -32,12 +30,16 @@ class Department {
         console.log(this.employees);
     }
 }
+// abstract classはインスタンス化できない、継承されるためだけのクラスとなる。
 Department.fiscalYear = 2020;
 class ITDepartment extends Department {
     constructor(id, admins) {
         super(id, "IT");
         // superはベースクラスのconstructor
         this.admins = admins;
+    }
+    describe() {
+        console.log("IT部門 - ID: " + this.id);
     }
 }
 class AccountingDepartment extends Department {
@@ -60,6 +62,9 @@ class AccountingDepartment extends Department {
         }
         this.addReport(value);
     }
+    describe() {
+        console.log("会計部門 - ID: ", this.id);
+    }
     addReport(text) {
         this.reports.push(text);
         this.lastReport = text;
@@ -76,7 +81,7 @@ class AccountingDepartment extends Department {
     }
 }
 // statice methodの使用
-const employee1 = Department.createEmployee('MaxStatic');
+const employee1 = Department.createEmployee("MaxStatic");
 console.log("static method/property : ");
 console.log(employee1, Department.fiscalYear);
 const it = new ITDepartment("d1", ["MaxIT"]);
@@ -102,10 +107,11 @@ const ac = new AccountingDepartment("a2", []);
 ac.addReport("something");
 ac.mostRecentReport = "通期会計レポート";
 // mostRecentReport はsetterなので、関数コール()の形ではなく = でプロパティのように使用できる。
-ac.printReports();
+// ac.printReports();
 ac.addEmployee("Max");
 ac.addEmployee("Manu");
+ac.describe();
 console.log("mostRecentReport: " + ac.mostRecentReport);
-ac.printEmployeeInformation();
+// ac.printEmployeeInformation();
 console.log(ac);
 //# sourceMappingURL=app.js.map

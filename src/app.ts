@@ -1,6 +1,7 @@
 // Code goes here!
 
-class Department {
+abstract class Department {
+  // abstract classはインスタンス化できない、継承されるためだけのクラスとなる。
   static fiscalYear = 2020;
 
   // private readonly id: string;
@@ -12,11 +13,11 @@ class Department {
     return { name: name };
   }
 
-  constructor(private readonly id: string, public name: string) {
+  constructor(protected readonly id: string, public name: string) {
     // id, name というプロパティの作成とコンストラクタを同時に定義できる。
     // readonly はtypescript固有。一度初期値が設定された後に変更不可とする。
     // this.name = n;
-    
+
     // console.log(this.fiscalYear);
     // これはエラー。staticでないメンバからstaticなfiscalYearにはアクセスできない。
     // ※インスタンスからはアクセスできない。
@@ -24,10 +25,9 @@ class Department {
     console.log(Department.fiscalYear); // これは可能
   }
 
-  describe(this: Department) {
-    console.log(`Department (${this.id}): ${this.name}`);
-    // `` で囲うテンプレート文字列。 ${}により変数を指定、展開された文字列が得られる。
-  }
+  abstract describe(this: Department): void;
+  // メソッドの名前・引数・戻り値だけ決めた抽象クラス。実装は記述不可。voidでなければいけない。
+  // 具体的な実装はサブクラスで。(実装を強制できる)
 
   addEmployee(employee: string) {
     this.employees.push(employee);
@@ -51,6 +51,11 @@ class ITDepartment extends Department {
     // superはベースクラスのconstructor
     this.admins = admins;
   }
+
+  describe(){
+    console.log("IT部門 - ID: " + this.id);
+  }
+
 }
 
 class AccountingDepartment extends Department {
@@ -77,6 +82,10 @@ class AccountingDepartment extends Department {
     this.lastReport = reports[0];
   }
 
+  describe() {
+    console.log("会計部門 - ID: ", this.id);
+  }
+
   addReport(text: string) {
     this.reports.push(text);
     this.lastReport = text;
@@ -96,7 +105,7 @@ class AccountingDepartment extends Department {
 }
 
 // statice methodの使用
-const employee1 = Department.createEmployee('MaxStatic');
+const employee1 = Department.createEmployee("MaxStatic");
 console.log("static method/property : ");
 console.log(employee1, Department.fiscalYear);
 
@@ -133,12 +142,13 @@ ac.addReport("something");
 ac.mostRecentReport = "通期会計レポート";
 // mostRecentReport はsetterなので、関数コール()の形ではなく = でプロパティのように使用できる。
 
-ac.printReports();
+// ac.printReports();
 
 ac.addEmployee("Max");
 ac.addEmployee("Manu");
+ac.describe();
 
 console.log("mostRecentReport: " + ac.mostRecentReport);
 
-ac.printEmployeeInformation();
+// ac.printEmployeeInformation();
 console.log(ac);
