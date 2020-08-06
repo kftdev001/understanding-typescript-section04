@@ -62,6 +62,14 @@ class AccountingDepartment extends Department {
         }
         this.addReport(value);
     }
+    static getInstance() {
+        if (this.instance) {
+            // static 内の this はクラス自体を指す
+            return this.instance;
+        }
+        this.instance = new AccountingDepartment('d2', []);
+        return this.instance;
+    }
     describe() {
         console.log("会計部門 - ID: ", this.id);
     }
@@ -99,7 +107,13 @@ it.describe();
 it.printEmployeeInformation();
 // const itCopy = {name: "Acc2", describe: it.describe};
 // itCopy.describe();
-const ac = new AccountingDepartment("a2", []);
+console.log("シングルトン");
+// typescriptを使えば簡単に実装できる。
+// const ac = new AccountingDepartment("a2", []);
+const ac = AccountingDepartment.getInstance();
+console.log(ac);
+const ac2 = AccountingDepartment.getInstance();
+console.log(ac2);
 // console.log(ac.mostRecentReport);
 // getterであるmostRecentReportには()が不要
 // このタイミングではaddReport()されていないのでErrorを投げる

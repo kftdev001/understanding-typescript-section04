@@ -60,6 +60,7 @@ class ITDepartment extends Department {
 
 class AccountingDepartment extends Department {
   private lastReport: string;
+  private static instance: AccountingDepartment;
 
   get mostRecentReport() {
     // getter カプセル化＝データや処理を隠蔽化
@@ -76,10 +77,19 @@ class AccountingDepartment extends Department {
     this.addReport(value);
   }
 
-  constructor(id: string, private reports: string[]) {
+  private constructor(id: string, private reports: string[]) {
     super(id, "Accounting");
     // superはベースクラスのconstructor
     this.lastReport = reports[0];
+  }
+
+  static getInstance(){
+    if(this.instance){
+      // static 内の this はクラス自体を指す
+      return this.instance;
+    }
+    this.instance = new AccountingDepartment('d2',[]);
+    return this.instance;
   }
 
   describe() {
@@ -130,7 +140,13 @@ it.printEmployeeInformation();
 // const itCopy = {name: "Acc2", describe: it.describe};
 // itCopy.describe();
 
-const ac = new AccountingDepartment("a2", []);
+console.log("シングルトン")
+// typescriptを使えば簡単に実装できる。
+// const ac = new AccountingDepartment("a2", []);
+const ac = AccountingDepartment.getInstance();
+console.log(ac)
+const ac2 = AccountingDepartment.getInstance();
+console.log(ac2)
 
 // console.log(ac.mostRecentReport);
 // getterであるmostRecentReportには()が不要
