@@ -2,16 +2,20 @@
 
 class Department {
 
-  name: string;
+  // private readonly id: string;
+  // name: string;
   private employees: string[] = [];
   // javascriptは基本的にすべてpublic。privateの概念はtypescript。
 
-  constructor(n: string) {
-    this.name = n;
+  constructor(private readonly id: string, public name:string) {
+    // id, name というプロパティの作成とコンストラクタを同時に定義できる。
+    // readonly はtypescript固有。一度初期値が設定された後に変更不可とする。
+    // this.name = n;
   }
 
   describe(this: Department) {
-    console.log("Department: " + this.name);
+    console.log(`Department (${this.id}): ${this.name}`);
+    // `` で囲うテンプレート文字列。 ${}により変数を指定、展開された文字列が得られる。
   }
 
   addEmployee(employee: string) {
@@ -24,7 +28,7 @@ class Department {
   }
 }
 
-const accounting = new Department("Accounting");
+const accounting = new Department("d1","Accounting");
 
 accounting.addEmployee("Max");
 accounting.addEmployee("Manu");
