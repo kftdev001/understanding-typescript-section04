@@ -1,4 +1,9 @@
-interface Greetable {
+interface Named {
+  readonly name: string;
+}
+
+interface Greetable extends Named{
+  // interfaceはinterfaceを継承できる
   // type Person は実質的にinterface Personと同じ。
   // typeはカスタム型
   // javascript には interface は存在しない。
