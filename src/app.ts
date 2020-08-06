@@ -14,7 +14,9 @@ add = (n1: number, n2: number) => {
 };
 
 interface Named {
-  readonly name: string;
+  readonly name?: string;
+  outputName?: string;
+  // ? をつけることで、outputNameを持つかどうかは任意であることを指定できる。
 }
 
 interface Greetable extends Named {
@@ -32,21 +34,29 @@ interface Greetable extends Named {
   public/privateは指定できない。
   readonlyは指定できる。
   */
-  name: string;
+  name?: string;
 
   greet(phrase: string): void;
 }
 
 class Person implements Greetable {
   // クラスは1つしか継承できないが、interfaceは複数実装(implements)できる。
-  name: string;
+  name?: string;
+  // ? をつけることで任意指定
   age = 30;
-  constructor(n: string) {
-    this.name = n;
+  constructor(n?: string) {
+    // ? をつけると入力ないとき n は undefinedになる。デフォルト値を設定するのも可。
+    if (n) {
+      this.name = n;
+    }
   }
 
   greet(phrase: string) {
-    console.log(phrase + " " + this.name);
+    if (this.name) {
+      console.log(phrase + " " + this.name);
+    } else {
+      console.log("Hi!");
+    }
   }
 }
 
@@ -55,6 +65,8 @@ let user1: Greetable;
 
 user1 = new Person("Max");
 // PersonクラスはGreetableのインターフェースを実装しているのでuser1に設定可能
+
+user1 = new Person();
 
 user1.greet("Hello I am");
 console.log(user1);
