@@ -1,13 +1,12 @@
 // Code goes here!
 
 class Department {
-
   // private readonly id: string;
   // name: string;
-  private employees: string[] = [];
+  protected employees: string[] = [];
   // javascriptは基本的にすべてpublic。privateの概念はtypescript。
 
-  constructor(private readonly id: string, public name:string) {
+  constructor(private readonly id: string, public name: string) {
     // id, name というプロパティの作成とコンストラクタを同時に定義できる。
     // readonly はtypescript固有。一度初期値が設定された後に変更不可とする。
     // this.name = n;
@@ -28,17 +27,63 @@ class Department {
   }
 }
 
-const accounting = new Department("d1","Accounting");
+class ITDepartment extends Department {
+  // 継承は1つのクラスからしかできない。
+  // extends が継承
+  // Departmentはベースクラス
+  // ITDepartmentは継承先クラス(サブクラス)
 
-accounting.addEmployee("Max");
-accounting.addEmployee("Manu");
+  admins: string[];
+  constructor(id: string, admins: string[]) {
+    super(id, "IT");
+    // superはベースクラスのconstructor
+    this.admins = admins;
+  }
+}
 
-// accounting.employees[2] = 'Anna';
+class AccountingDepartment extends Department {
+  constructor(id: string, private reports: string[]) {
+    super(id, "Accounting");
+    // superはベースクラスのconstructor
+  }
+
+  addReport(text: string) {
+    this.reports.push(text);
+  }
+  printReports() {
+    console.log(this.reports);
+  }
+
+  addEmployee(name: string) {
+    if (name === "Max") {
+      return;
+    }
+    this.employees.push(name);
+    // 上位クラスのemployeesを protected 属性にすることでサブクラスからもアクセス可能。
+  }
+}
+
+const it = new ITDepartment("d1", ["MaxIT"]);
+
+it.addEmployee("Max");
+it.addEmployee("Manu");
+
+// it.employees[2] = 'Anna';
 // private指定なのでエラー
 
-console.log(accounting);
-accounting.describe();
-accounting.printEmployeeInformation();
+console.log(it);
+it.describe();
+it.printEmployeeInformation();
 
-// const accountingCopy = {name: "Acc2", describe: accounting.describe};
-// accountingCopy.describe();
+// const itCopy = {name: "Acc2", describe: it.describe};
+// itCopy.describe();
+
+const ac = new AccountingDepartment("a2", []);
+ac.addReport("RalAC");
+ac.printReports();
+
+ac.addEmployee('Max');
+ac.addEmployee('Manu');
+
+ac.printEmployeeInformation();
+console.log(ac);

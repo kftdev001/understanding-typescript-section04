@@ -24,14 +24,48 @@ class Department {
         console.log(this.employees);
     }
 }
-const accounting = new Department("d1", "Accounting");
-accounting.addEmployee("Max");
-accounting.addEmployee("Manu");
-// accounting.employees[2] = 'Anna';
+class ITDepartment extends Department {
+    constructor(id, admins) {
+        super(id, "IT");
+        // superはベースクラスのconstructor
+        this.admins = admins;
+    }
+}
+class AccountingDepartment extends Department {
+    constructor(id, reports) {
+        super(id, "Accounting");
+        this.reports = reports;
+        // superはベースクラスのconstructor
+    }
+    addReport(text) {
+        this.reports.push(text);
+    }
+    printReports() {
+        console.log(this.reports);
+    }
+    addEmployee(name) {
+        if (name === "Max") {
+            return;
+        }
+        this.employees.push(name);
+        // 上位クラスのemployeesを protected 属性にすることでサブクラスからもアクセス可能。
+    }
+}
+const it = new ITDepartment("d1", ["MaxIT"]);
+it.addEmployee("Max");
+it.addEmployee("Manu");
+// it.employees[2] = 'Anna';
 // private指定なのでエラー
-console.log(accounting);
-accounting.describe();
-accounting.printEmployeeInformation();
-// const accountingCopy = {name: "Acc2", describe: accounting.describe};
-// accountingCopy.describe();
+console.log(it);
+it.describe();
+it.printEmployeeInformation();
+// const itCopy = {name: "Acc2", describe: it.describe};
+// itCopy.describe();
+const ac = new AccountingDepartment("a2", []);
+ac.addReport("RalAC");
+ac.printReports();
+ac.addEmployee('Max');
+ac.addEmployee('Manu');
+ac.printEmployeeInformation();
+console.log(ac);
 //# sourceMappingURL=app.js.map
